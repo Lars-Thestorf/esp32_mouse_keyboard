@@ -25,15 +25,17 @@ ble_hid_mem_t *ble_hid_mem = NULL;
 
 static hid_report_map_t *hid_dev_rpt_by_id(uint8_t id, uint8_t type)
 {
-    hid_report_map_t *rpt = ble_hid_mem->hid_dev_rpt_tbl;
+	hid_report_map_t *rpt = ble_hid_mem->hid_dev_rpt_tbl;
 
-    for (uint8_t i = ble_hid_mem->hid_dev_rpt_tbl_Len; i > 0; i--, rpt++) {
-        if (rpt->id == id && rpt->type == type && rpt->mode == ble_hid_mem->hidProtocolMode) {
-            return rpt;
-        }
-    }
+	for (uint8_t i = ble_hid_mem->hid_dev_rpt_tbl_Len; i > 0; i--, rpt++)
+	{
+		if (rpt->id == id && rpt->type == type && rpt->mode == ble_hid_mem->hidProtocolMode)
+		{
+			return rpt;
+		}
+	}
 
-    return NULL;
+	return NULL;
 }
 
 void hid_dev_register_reports(uint8_t num_reports, hid_report_map_t *p_report)

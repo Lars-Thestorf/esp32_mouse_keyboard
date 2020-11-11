@@ -16,6 +16,7 @@
 #include <string.h>
 #include "esp_log.h"
 #include "hid_mem.h"
+#include "hid_device_le_prf.h"
 
 /// characteristic presentation information
 struct prf_char_pres_fmt
@@ -37,7 +38,7 @@ struct prf_char_pres_fmt
 
 // HID Report Map characteristic value
 // Keyboard report descriptor (using format for Boot interface descriptor)
-static const uint8_t hidReportMap[] = {
+const uint8_t hidReportMap[] = {
     0x05, 0x01,  // Usage Pg (Generic Desktop)
     0x09, 0x06,  // Usage (Keyboard)
     0xA1, 0x01,  // Collection: (Application)
@@ -187,18 +188,10 @@ static const uint8_t hidReportMap[] = {
 
 };
 
-/// Battery Service Attributes Indexes
-enum
+uint32_t get_struct_size(void)
 {
-    BAS_IDX_SVC,
-
-    BAS_IDX_BATT_LVL_CHAR,
-    BAS_IDX_BATT_LVL_VAL,
-    BAS_IDX_BATT_LVL_NTF_CFG,
-    BAS_IDX_BATT_LVL_PRES_FMT,
-
-    BAS_IDX_NB,
-};
+	return sizeof(hidReportMap);
+}
 
 #define HI_UINT16(a) (((a) >> 8) & 0xFF)
 #define LO_UINT16(a) ((a) & 0xFF)
@@ -221,7 +214,7 @@ struct gatts_profile_inst {
 //static hidRptMap_t  hidRptMap[HID_NUM_REPORTS];
 
 // HID Information characteristic value
-static const uint8_t hidInfo[HID_INFORMATION_LEN] = {
+const uint8_t hidInfo[HID_INFORMATION_LEN] = {
     LO_UINT16(0x0111), HI_UINT16(0x0111),             // bcdHID (USB HID version)
     0x00,                                             // bCountryCode
     HID_KBD_FLAGS                                     // Flags
@@ -233,41 +226,40 @@ static const uint8_t hidInfo[HID_INFORMATION_LEN] = {
  ****************************************************************************************
  */
 
-#define CHAR_DECLARATION_SIZE   (sizeof(uint8_t))
 ///the uuid definition
-static const uint16_t primary_service_uuid = ESP_GATT_UUID_PRI_SERVICE;
-static const uint16_t include_service_uuid = ESP_GATT_UUID_INCLUDE_SERVICE;
-static const uint16_t character_declaration_uuid = ESP_GATT_UUID_CHAR_DECLARE;
-static const uint16_t character_client_config_uuid = ESP_GATT_UUID_CHAR_CLIENT_CONFIG;
-static const uint16_t hid_info_char_uuid = ESP_GATT_UUID_HID_INFORMATION;
-static const uint16_t hid_report_map_uuid    = ESP_GATT_UUID_HID_REPORT_MAP;
-static const uint16_t hid_control_point_uuid = ESP_GATT_UUID_HID_CONTROL_POINT;
-static const uint16_t hid_report_uuid = ESP_GATT_UUID_HID_REPORT;
-static const uint16_t hid_proto_mode_uuid = ESP_GATT_UUID_HID_PROTO_MODE;
-static const uint16_t hid_kb_input_uuid = ESP_GATT_UUID_HID_BT_KB_INPUT;
-static const uint16_t hid_kb_output_uuid = ESP_GATT_UUID_HID_BT_KB_OUTPUT;
-static const uint16_t hid_mouse_input_uuid = ESP_GATT_UUID_HID_BT_MOUSE_INPUT;
-static const uint16_t hid_repot_map_ext_desc_uuid = ESP_GATT_UUID_EXT_RPT_REF_DESCR;
-static const uint16_t hid_report_ref_descr_uuid = ESP_GATT_UUID_RPT_REF_DESCR;
+const uint16_t primary_service_uuid = ESP_GATT_UUID_PRI_SERVICE;
+const uint16_t include_service_uuid = ESP_GATT_UUID_INCLUDE_SERVICE;
+const uint16_t character_declaration_uuid = ESP_GATT_UUID_CHAR_DECLARE;
+const uint16_t character_client_config_uuid = ESP_GATT_UUID_CHAR_CLIENT_CONFIG;
+const uint16_t hid_info_char_uuid = ESP_GATT_UUID_HID_INFORMATION;
+const uint16_t hid_report_map_uuid    = ESP_GATT_UUID_HID_REPORT_MAP;
+const uint16_t hid_control_point_uuid = ESP_GATT_UUID_HID_CONTROL_POINT;
+const uint16_t hid_report_uuid = ESP_GATT_UUID_HID_REPORT;
+const uint16_t hid_proto_mode_uuid = ESP_GATT_UUID_HID_PROTO_MODE;
+const uint16_t hid_kb_input_uuid = ESP_GATT_UUID_HID_BT_KB_INPUT;
+const uint16_t hid_kb_output_uuid = ESP_GATT_UUID_HID_BT_KB_OUTPUT;
+const uint16_t hid_mouse_input_uuid = ESP_GATT_UUID_HID_BT_MOUSE_INPUT;
+const uint16_t hid_repot_map_ext_desc_uuid = ESP_GATT_UUID_EXT_RPT_REF_DESCR;
+const uint16_t hid_report_ref_descr_uuid = ESP_GATT_UUID_RPT_REF_DESCR;
 ///the property definition
-static const uint8_t char_prop_notify = ESP_GATT_CHAR_PROP_BIT_NOTIFY;
-static const uint8_t char_prop_read = ESP_GATT_CHAR_PROP_BIT_READ;
-static const uint8_t char_prop_write_nr = ESP_GATT_CHAR_PROP_BIT_WRITE_NR;
-static const uint8_t char_prop_read_write = ESP_GATT_CHAR_PROP_BIT_WRITE|ESP_GATT_CHAR_PROP_BIT_READ;
-static const uint8_t char_prop_read_notify = ESP_GATT_CHAR_PROP_BIT_READ|ESP_GATT_CHAR_PROP_BIT_NOTIFY;
-static const uint8_t char_prop_read_write_notify = ESP_GATT_CHAR_PROP_BIT_READ|ESP_GATT_CHAR_PROP_BIT_WRITE|ESP_GATT_CHAR_PROP_BIT_NOTIFY;
-static const uint8_t char_prop_read_write_write_nr = ESP_GATT_CHAR_PROP_BIT_WRITE | ESP_GATT_CHAR_PROP_BIT_WRITE_NR | ESP_GATT_CHAR_PROP_BIT_READ;
+const uint8_t char_prop_notify = ESP_GATT_CHAR_PROP_BIT_NOTIFY;
+const uint8_t char_prop_read = ESP_GATT_CHAR_PROP_BIT_READ;
+const uint8_t char_prop_write_nr = ESP_GATT_CHAR_PROP_BIT_WRITE_NR;
+const uint8_t char_prop_read_write = ESP_GATT_CHAR_PROP_BIT_WRITE|ESP_GATT_CHAR_PROP_BIT_READ;
+const uint8_t char_prop_read_notify = ESP_GATT_CHAR_PROP_BIT_READ|ESP_GATT_CHAR_PROP_BIT_NOTIFY;
+const uint8_t char_prop_read_write_notify = ESP_GATT_CHAR_PROP_BIT_READ|ESP_GATT_CHAR_PROP_BIT_WRITE|ESP_GATT_CHAR_PROP_BIT_NOTIFY;
+const uint8_t char_prop_read_write_write_nr = ESP_GATT_CHAR_PROP_BIT_WRITE | ESP_GATT_CHAR_PROP_BIT_WRITE_NR | ESP_GATT_CHAR_PROP_BIT_READ;
 
 /// battary Service
-static const uint16_t battary_svc = ESP_GATT_UUID_BATTERY_SERVICE_SVC;
+const uint16_t battary_svc = ESP_GATT_UUID_BATTERY_SERVICE_SVC;
 
-static const uint16_t bat_lev_uuid = ESP_GATT_UUID_BATTERY_LEVEL;
-static const uint8_t   bat_lev_ccc[2] ={ 0x00, 0x00};
-static const uint16_t char_format_uuid = ESP_GATT_UUID_CHAR_PRESENT_FORMAT;
+const uint16_t bat_lev_uuid = ESP_GATT_UUID_BATTERY_LEVEL;
+const uint8_t   bat_lev_ccc[2] ={ 0x00, 0x00};
+const uint16_t char_format_uuid = ESP_GATT_UUID_CHAR_PRESENT_FORMAT;
 
-static uint8_t battary_lev = 50;
+uint8_t battary_lev = 50;
 /// Full HRS Database Description - Used to add attributes into the database
-static const esp_gatts_attr_db_t bas_att_db[BAS_IDX_NB] =
+const esp_gatts_attr_db_t bas_att_db[BAS_IDX_NB] =
 {
     // Battary Service Declaration
     [BAS_IDX_SVC]               =  {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&primary_service_uuid, ESP_GATT_PERM_READ,
