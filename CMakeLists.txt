@@ -1,7 +1,7 @@
-# The following lines of boilerplate have to be in your project's CMakeLists
-# in this exact order for cmake to work correctly
-cmake_minimum_required(VERSION 3.5)
+idf_component_register(SRCS "esp_hidd_prf_api.c"
+                            "hid_dev.c"
+                            "hid_device_le_prf.c"
+                    REQUIRES bt
+                    INCLUDE_DIRS ".")
 
-set(SUPPORTED_TARGETS esp32)
-include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-project(esp32_mouse_keyboard)
+target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-unused-const-variable)
