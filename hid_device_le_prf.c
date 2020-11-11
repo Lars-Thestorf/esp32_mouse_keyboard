@@ -37,6 +37,7 @@ static hid_report_map_t hid_rpt_map[HID_NUM_REPORTS];
 // HID Report Map characteristic value
 // Keyboard report descriptor (using format for Boot interface descriptor)
 static const uint8_t hidReportMap[] = {
+#ifdef CONFIG_BLEHID_USEKEYBOARD
     0x05, 0x01,  // Usage Pg (Generic Desktop)
     0x09, 0x06,  // Usage (Keyboard)
     0xA1, 0x01,  // Collection: (Application)
@@ -82,6 +83,8 @@ static const uint8_t hidReportMap[] = {
     0x81, 0x00,  //   Input: (Data, Array)
     //
     0xC0,        // End Collection
+#endif
+#ifdef CONFIG_BLEHID_USECONSUMER
     //
     0x05, 0x0C,   // Usage Pg (Consumer Devices)
     0x09, 0x01,   // Usage (Consumer Control)
@@ -140,8 +143,9 @@ static const uint8_t hidReportMap[] = {
     0xC0,           //   End Collection
     0x81, 0x03,   //   Input (Const, Var, Abs)
     0xC0,            // End Collectionq
-    
-    
+#endif
+#ifdef CONFIG_BLEHID_USEMOUSE
+    //
     0x05, 0x01,  // Usage Page (Generic Desktop)
     0x09, 0x02,  // Usage (Mouse)
     0xA1, 0x01,  // Collection (Application)
@@ -170,7 +174,7 @@ static const uint8_t hidReportMap[] = {
     0x81, 0x06,  //     Input (Data, Variable, Relative) - X & Y coordinate
     0xC0,        //   End Collection
     0xC0,        // End Collection
-
+#endif
 #if (SUPPORT_REPORT_VENDOR == true)
     0x06, 0xFF, 0xFF, // Usage Page(Vendor defined)
     0x09, 0xA5,       // Usage(Vendor Defined)
