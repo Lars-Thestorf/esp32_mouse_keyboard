@@ -188,10 +188,7 @@ const uint8_t hidReportMap[] = {
 
 };
 
-uint32_t get_struct_size(void)
-{
-	return sizeof(hidReportMap);
-}
+const int hidReportMapSize = sizeof(hidReportMap);
 
 #define HI_UINT16(a) (((a) >> 8) & 0xFF)
 #define LO_UINT16(a) ((a) & 0xFF)
