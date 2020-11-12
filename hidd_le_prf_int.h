@@ -17,7 +17,7 @@
 #ifndef __HID_DEVICE_LE_PRF__
 #define __HID_DEVICE_LE_PRF__
 #include <stdbool.h>
-#include "esp_gatts_api.h"
+#include <esp_gatts_api.h>
 #include "esp_gatt_defs.h"
 #include "esp_hidd_prf_api.h"
 #include "esp_gap_ble_api.h"

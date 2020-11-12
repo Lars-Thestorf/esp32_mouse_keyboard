@@ -15,7 +15,7 @@
 #ifndef __ESP_HIDD_API_H__
 #define __ESP_HIDD_API_H__
 
-#include "esp_bt_defs.h"
+#include <esp_bt_defs.h>
 #include "esp_gatt_defs.h"
 #include "esp_gatt_common_api.h"
 #include "esp_err.h"
