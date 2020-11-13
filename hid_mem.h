@@ -11,6 +11,7 @@ extern "C" {
 
 typedef struct ble_hid_mem_t
 {
+	uint8_t number_of_connections;
 	hid_report_map_t *hid_dev_rpt_tbl;
 	uint8_t hid_dev_rpt_tbl_Len;
 	hid_report_map_t hid_rpt_map[HID_NUM_REPORTS];

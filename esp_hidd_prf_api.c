@@ -22,6 +22,8 @@
 #include "hidd_le_prf_int.h"
 #include "hid_device_le_prf.h"
 #include <esp_heap_caps.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
 
 // HID keyboard input report length
 #define HID_KEYBOARD_IN_RPT_LEN     8
@@ -76,10 +78,11 @@ if (ble_hid_mem != NULL) {
 	//Set it to zero
 	memset(ble_hid_mem, 0, sizeof(ble_hid_mem_t));
 	
+	ble_hid_mem->number_of_connections = 0;
 	
 	// Create special datastrutures on stack and copy them into heap mem.
 	// Full Hid device Database Description - Used to add attributes into the database
-	esp_gatts_attr_db_t hidd_le_gatt_db[HIDD_LE_IDX_NB] =
+	const esp_gatts_attr_db_t hidd_le_gatt_db[HIDD_LE_IDX_NB] =
 	{
 							// HID Service Declaration
 			[HIDD_LE_IDX_SVC]                       = {{ESP_GATT_AUTO_RSP}, {ESP_UUID_LEN_16, (uint8_t *)&primary_service_uuid,
@@ -365,9 +368,11 @@ esp_err_t esp_hidd_profile_deinit(void)
     //THX @Lars-Thestorf
     //see issue #44
     ble_hid_mem->hidd_le_env.enabled = false;
-		
-		free(ble_hid_mem);
-		ble_hid_mem = NULL;
+	while(ble_hid_mem->number_of_connections > 0){
+		vTaskDelay(100/portTICK_PERIOD_MS);
+	}
+	free(ble_hid_mem);
+	ble_hid_mem = NULL;
 		//TODO: Do more bt cleanups if possible
 
     return ESP_OK;

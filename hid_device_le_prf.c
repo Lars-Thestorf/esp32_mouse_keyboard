@@ -314,6 +314,7 @@ void esp_hidd_prf_cb_hdl(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
             break;
         case ESP_GATTS_CONNECT_EVT: {
             esp_hidd_cb_param_t cb_param = {0};
+			ble_hid_mem->number_of_connections++;
 			ESP_LOGI(HID_LE_PRF_TAG, "HID connection establish, conn_id = %x",param->connect.conn_id);
 			memcpy(cb_param.connect.remote_bda, param->connect.remote_bda, sizeof(esp_bd_addr_t));
             cb_param.connect.conn_id = param->connect.conn_id;
@@ -325,10 +326,11 @@ void esp_hidd_prf_cb_hdl(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if,
             break;
         }
         case ESP_GATTS_DISCONNECT_EVT: {
-			 if(ble_hid_mem->hidd_le_env.hidd_cb != NULL) {
-                    (ble_hid_mem->hidd_le_env.hidd_cb)(ESP_HIDD_EVENT_BLE_DISCONNECT, NULL);
-             }
+			if(ble_hid_mem->hidd_le_env.hidd_cb != NULL) {
+                (ble_hid_mem->hidd_le_env.hidd_cb)(ESP_HIDD_EVENT_BLE_DISCONNECT, NULL);
+			}
             hidd_clcb_dealloc(param->disconnect.conn_id);
+			ble_hid_mem->number_of_connections--;
             break;
         }
         case ESP_GATTS_CLOSE_EVT:
@@ -422,8 +424,8 @@ bool hidd_clcb_dealloc (uint16_t conn_id)
     hidd_clcb_t      *p_clcb = NULL;
 
     for (i_clcb = 0, p_clcb= ble_hid_mem->hidd_le_env.hidd_clcb; i_clcb < HID_MAX_APPS; i_clcb++, p_clcb++) {
-            memset(p_clcb, 0, sizeof(hidd_clcb_t));
-            return true;
+		memset(p_clcb, 0, sizeof(hidd_clcb_t));
+		return true;
     }
 
     return false;
