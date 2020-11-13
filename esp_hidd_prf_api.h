@@ -52,6 +52,7 @@ typedef enum {
     ESP_HIDD_DEINIT_FAILED = 0,
 } esp_hidd_deinit_state_t;
 
+
 #define LEFT_CONTROL_KEY_MASK        (1 << 0)
 #define LEFT_SHIFT_KEY_MASK          (1 << 1)
 #define LEFT_ALT_KEY_MASK            (1 << 2)

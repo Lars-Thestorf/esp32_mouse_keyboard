@@ -18,9 +18,14 @@
 #include "hidd_le_prf_int.h"
 
 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+
+#define PROFILE_NUM            1
+#define PROFILE_APP_IDX        0
 
 
 /* HID Report type */
@@ -241,6 +246,13 @@ typedef struct
   uint8_t     hidFlags;         // HID feature flags
 
 } hid_dev_cfg_t;
+
+struct gatts_profile_inst {
+    esp_gatts_cb_t gatts_cb;
+    uint16_t gatts_if;
+    uint16_t app_id;
+    uint16_t conn_id;
+};
 
 void hid_dev_register_reports(uint8_t num_reports, hid_report_map_t *p_report);
 

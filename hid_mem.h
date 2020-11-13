@@ -9,6 +9,9 @@
 extern "C" {
 #endif
 
+
+
+
 typedef struct ble_hid_mem_t
 {
 	uint8_t number_of_connections;
@@ -28,6 +31,7 @@ typedef struct ble_hid_mem_t
 	uint8_t hidReportRefFeature[HID_REPORT_REF_LEN];
 	uint8_t hidReportRefCCIn[HID_REPORT_REF_LEN];
 	esp_gatts_attr_db_t hidd_le_gatt_db[HIDD_LE_IDX_NB];
+	struct gatts_profile_inst heart_rate_profile_tab[PROFILE_NUM];
 	// hid Service uuid
 	uint16_t hid_le_svc;
 	uint16_t hid_count;

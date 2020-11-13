@@ -3,6 +3,9 @@
 #include <stdint.h>
 #include <sdkconfig.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /// Battery Service Attributes Indexes
 enum
@@ -20,6 +23,8 @@ enum
 
 #define CHAR_DECLARATION_SIZE   (sizeof(uint8_t))
 
+
+void esp_hidd_prf_cb_hdl(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param);
 
 extern const uint8_t hidReportMap[];
 extern const int hidReportMapSize;
@@ -51,5 +56,9 @@ extern const uint8_t   bat_lev_ccc[2];
 extern const uint16_t char_format_uuid;
 extern const esp_gatts_attr_db_t bas_att_db[BAS_IDX_NB];
 extern const uint8_t hidInfo[HID_INFORMATION_LEN];
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -296,8 +296,12 @@ if (ble_hid_mem != NULL) {
 																																				ble_hid_mem->hidReportRefFeature}},
 	};
 
+
 	memcpy(ble_hid_mem->hidd_le_gatt_db, hidd_le_gatt_db, sizeof(hidd_le_gatt_db));
-	
+
+	ble_hid_mem->heart_rate_profile_tab[PROFILE_APP_IDX].gatts_cb = &esp_hidd_prf_cb_hdl;
+	ble_hid_mem->heart_rate_profile_tab[PROFILE_APP_IDX].gatts_if = ESP_GATT_IF_NONE;
+
 	ble_hid_mem->battary_lev = 50;
 	ble_hid_mem->hidReportMapLen = hidReportMapSize;
 	ble_hid_mem->hidProtocolMode = HID_PROTOCOL_MODE_REPORT;
