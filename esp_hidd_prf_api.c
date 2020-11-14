@@ -375,6 +375,7 @@ esp_err_t esp_hidd_profile_deinit(void)
 	while(ble_hid_mem->number_of_connections > 0){
 		vTaskDelay(100/portTICK_PERIOD_MS);
 	}
+	vTaskDelay(100/portTICK_PERIOD_MS);
 	free(ble_hid_mem);
 	ble_hid_mem = NULL;
 		//TODO: Do more bt cleanups if possible
