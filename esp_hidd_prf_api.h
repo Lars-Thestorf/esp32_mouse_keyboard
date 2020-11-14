@@ -157,6 +157,8 @@ esp_err_t esp_hidd_profile_deinit(void);
  */
 uint16_t esp_hidd_get_version(void);
 
+uint8_t esp_hidd_connected_count(void);
+
 void esp_hidd_send_consumer_value(uint16_t conn_id, uint8_t key_cmd, bool key_pressed);
 
 void esp_hidd_send_keyboard_value(uint16_t conn_id, key_mask_t special_key_mask, uint8_t *keyboard_cmd, uint8_t num_key);

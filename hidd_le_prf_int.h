@@ -34,7 +34,7 @@
 #define HIDD_LE_NB_HIDS_INST_MAX              (1)
 #endif
 
-#define HIDD_GREAT_VER   0x01  //Version + Subversion
+#define HIDD_GREAT_VER   0x02  //Version + Subversion
 #define HIDD_SUB_VER     0x00  //Version + Subversion
 #define HIDD_VERSION     ((HIDD_GREAT_VER<<8)|HIDD_SUB_VER)  //Version + Subversion
 

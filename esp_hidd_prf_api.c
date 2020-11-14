@@ -387,6 +387,11 @@ uint16_t esp_hidd_get_version(void)
 	return HIDD_VERSION;
 }
 
+uint8_t esp_hidd_connected_count(void)
+{
+	return ble_hid_mem->number_of_connections;
+}
+
 void esp_hidd_send_consumer_value(uint16_t conn_id, uint8_t key_cmd, bool key_pressed)
 {
     uint8_t buffer[HID_CC_IN_RPT_LEN] = {0, 0};
